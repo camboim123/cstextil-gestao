@@ -1,0 +1,13 @@
+{
+  "name": "CS-Tingimentos",
+  "short_name": "CS-Tingimentos",
+  "description": "Programação de pedidos de tingimento têxtil",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a1612",
+  "theme_color": "#1a1612",
+  "orientation": "landscape",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

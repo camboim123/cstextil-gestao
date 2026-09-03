@@ -1,0 +1,70 @@
+╔══════════════════════════════════════════════════════════════╗
+║              CS-TINGIMENTOS — VERSÃO REDE LOCAL              ║
+╚══════════════════════════════════════════════════════════════╝
+
+COMO FUNCIONA
+─────────────
+  Um computador da firma vira o "servidor".
+  Todos os outros acessam pelo navegador (Chrome ou Edge).
+  Os dados ficam salvos no arquivo database.json desta pasta.
+  Qualquer alteração feita em um computador aparece nos outros.
+
+
+PASSO A PASSO — PRIMEIRO USO
+─────────────────────────────
+
+  1. INSTALAR O NODE.JS (só uma vez, só no computador servidor)
+     ▶ Acesse: https://nodejs.org
+     ▶ Baixe a versão "LTS" e instale normalmente
+     ▶ Reinicie o computador após a instalação
+
+  2. COLOCAR A PASTA NO COMPUTADOR SERVIDOR
+     ▶ Copie a pasta "cs-tingimentos-server" para
+       um lugar fixo, ex: C:\CS-Tingimentos\
+
+  3. INICIAR O SERVIDOR
+     ▶ Clique duas vezes no arquivo:
+       INICIAR-SERVIDOR.bat
+     ▶ Uma janela preta vai abrir mostrando o endereço IP
+       Ex: http://192.168.1.10:3000
+
+  4. ACESSAR DE OUTROS COMPUTADORES
+     ▶ Abra o Chrome ou Edge em qualquer computador da rede
+     ▶ Digite o endereço IP exibido na janela preta
+       Ex: http://192.168.1.10:3000
+     ▶ O aplicativo vai abrir! Todos veem os mesmos dados.
+
+
+USAR TODO DIA
+─────────────
+  ▶ No computador servidor: clique em INICIAR-SERVIDOR.bat
+  ▶ Nos outros computadores: abra o Chrome e acesse o IP
+  ▶ Para encerrar: feche a janela preta ou pressione CTRL+C
+
+
+BACKUP DOS DADOS
+────────────────
+  ▶ Todos os pedidos e clientes ficam no arquivo:
+    database.json  (nesta mesma pasta)
+  ▶ Faça cópias periódicas deste arquivo para segurança
+  ▶ Para restaurar: substitua o database.json pelo backup
+
+
+DICAS IMPORTANTES
+─────────────────
+  ▶ O computador servidor precisa estar LIGADO para que
+    os outros consigam acessar
+  ▶ Todos os computadores precisam estar na MESMA REDE Wi-Fi
+    ou cabo (rede local da firma)
+  ▶ O endereço IP pode mudar se o roteador reiniciar —
+    se não conectar, abra o INICIAR-SERVIDOR.bat novamente
+    para ver o IP atual
+  ▶ Não feche a janela preta enquanto estiver usando
+
+
+SUPORTE
+───────
+  Em caso de dúvidas, consulte o CS (seu assistente)
+  no chat do CS-Tingimentos.
+
+══════════════════════════════════════════════════════════════

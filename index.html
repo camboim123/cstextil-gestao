@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CStextil – Tingimentos</title>
+<meta name="theme-color" content="#1c1917">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CStextil">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c-bg:#f5f3ef; --c-surface:#ffffff; --c-ink:#1c1917; --c-ink2:#292524;
+  --c-muted:#78716c; --c-border:#e2ddd8; --c-hover:#faf8f5;
+  --c-brand:#c2410c; --c-brand-lt:#fff7ed; --c-brand-bd:#fdba74;
+  --c-pend:#b45309; --c-pend-bg:#fffbeb; --c-pend-bd:#fcd34d;
+  --c-proc:#1d4ed8; --c-proc-bg:#eff6ff; --c-proc-bd:#93c5fd;
+  --c-ram:#7c3aed;  --c-ram-bg:#f5f3ff;  --c-ram-bd:#c4b5fd;
+  --c-entg:#15803d; --c-entg-bg:#f0fdf4; --c-entg-bd:#86efac;
+  --hts1:#c2410c; --hts1-bg:#fff7ed; --hts1-bd:#fdba74;
+  --hts2:#1d4ed8; --hts2-bg:#eff6ff; --hts2-bd:#93c5fd;
+  --hts3:#15803d; --hts3-bg:#f0fdf4; --hts3-bd:#86efac;
+  --hts4:#7c3aed; --hts4-bg:#f5f3ff; --hts4-bd:#c4b5fd;
+  --c-conc:#0f766e; --c-conc-bg:#f0fdfa; --c-conc-bd:#5eead4;
+  --c-cancel:#991b1b; --c-cancel-bg:#fef2f2; --c-cancel-bd:#fca5a5;
+  --shadow-sm:0 1px 4px rgba(28,25,23,.07);
+  --shadow:0 2px 10px rgba(28,25,23,.09);
+  --shadow-md:0 4px 18px rgba(28,25,23,.12);
+  --r:9px; --fd:'Barlow Condensed',sans-serif; --fb:'Barlow',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--c-bg);color:var(--c-ink);font-family:var(--fb);min-height:100vh;}
+.hdr{background:var(--c-ink2);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.3);}
+.hdr-brand{display:flex;align-items:baseline;gap:10px;}
+.hdr-name{font-family:var(--fd);font-size:22px;font-weight:800;color:#fff;letter-spacing:1px;text-transform:uppercase;}
+.hdr-tag{font-size:10px;color:#fb923c;font-weight:700;text-transform:uppercase;letter-spacing:2px;border:1px solid #fb923c;padding:2px 7px;border-radius:3px;}
+.hdr-stats{display:flex;gap:18px;}
+.hs{text-align:center;}
+.hs-v{font-family:var(--fd);font-size:18px;font-weight:700;color:#fff;line-height:1;}
+.hs-v.or{color:#fb923c;}.hs-v.bl{color:#93c5fd;}.hs-v.gr{color:#86efac;}.hs-v.re{color:#fca5a5;}
+.hs-l{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:1.5px;margin-top:1px;}
+.tabs{background:var(--c-ink);display:flex;border-bottom:2px solid #111;overflow-x:auto;}
+.tab{padding:12px 20px;font-family:var(--fd);font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#666;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .18s;display:flex;align-items:center;gap:7px;user-select:none;white-space:nowrap;}
+.tab:hover{color:#bbb;}
+.tab.active{color:#fff;border-bottom-color:var(--c-brand);}
+.badge{background:var(--c-brand);color:#fff;font-size:10px;font-weight:800;padding:1px 6px;border-radius:10px;min-width:18px;text-align:center;line-height:16px;}
+.tab.active .badge{background:#fff;color:var(--c-brand);}
+.wrap{max-width:1400px;margin:0 auto;padding:22px 20px;}
+.page{display:none;}
+.page.on{display:block;animation:fadeUp .2s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:18px;}
+.card-h{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--c-border);background:#faf9f7;}
+.card-h h2{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--c-ink2);letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:7px;}
+.card-b{padding:18px;}
+.fg{display:grid;gap:11px;align-items:end;}
+.fg-reg{grid-template-columns:.6fr 1.4fr 1fr .9fr .9fr auto;}
+.fg-cli{grid-template-columns:1fr 1fr 1fr auto;}
+.fgr{display:flex;flex-direction:column;gap:5px;}
+.lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--c-muted);}
+input,select,textarea{background:var(--c-bg);border:1.5px solid var(--c-border);border-radius:6px;padding:9px 11px;font-family:var(--fb);font-size:13.5px;color:var(--c-ink);width:100%;transition:border-color .18s,box-shadow .18s;}
+input:focus,select:focus{outline:none;border-color:var(--c-brand);box-shadow:0 0 0 3px rgba(194,65,12,.1);}
+.btn{border:none;border-radius:7px;cursor:pointer;font-family:var(--fd);font-weight:700;letter-spacing:.5px;text-transform:uppercase;transition:all .16s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.btn-r{background:var(--c-brand);color:#fff;padding:10px 20px;font-size:14px;}
+.btn-r:hover{background:#9a3412;transform:translateY(-1px);}
+.btn-g{background:#15803d;color:#fff;padding:10px 20px;font-size:14px;}
+.btn-g:hover{background:#166534;}
+.btn-x{background:none;border:1px solid var(--c-border);color:var(--c-muted);padding:5px 10px;font-size:11px;border-radius:5px;cursor:pointer;font-family:var(--fb);transition:all .16s;}
+.btn-x:hover{background:#fef2f2;border-color:#fca5a5;color:var(--c-cancel);}
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead th{padding:9px 13px;text-align:left;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--c-muted);background:#faf8f5;border-bottom:1px solid var(--c-border);white-space:nowrap;}
+tbody td{padding:10px 13px;font-size:13px;border-bottom:1px solid #f0ece6;vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--c-hover);}
+.tn{font-family:var(--fd);font-size:11.5px;color:var(--c-muted);width:28px;}
+.tp{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--c-brand);}
+.tcl{font-weight:600;}
+.tcl .sub{font-size:11px;color:var(--c-muted);font-weight:400;margin-top:1px;}
+.tar{font-weight:500;}
+.tq{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--c-ink2);}
+.tq span,.tpe span{font-size:10px;font-weight:400;color:var(--c-muted);margin-left:1px;}
+.tpe{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--c-proc);}
+.tdt{font-size:11.5px;color:var(--c-muted);white-space:nowrap;}
+.tac{display:flex;gap:5px;align-items:center;}
+.cc{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;background:var(--c-bg);border:1px solid var(--c-border);font-size:11px;font-weight:500;white-space:nowrap;}
+.cd{width:9px;height:9px;border-radius:50%;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.sb{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;cursor:pointer;border:none;font-family:var(--fb);transition:filter .15s;white-space:nowrap;}
+.sb:hover{filter:brightness(.93);}
+.sb.pendente{background:var(--c-pend-bg);color:var(--c-pend);border:1px solid var(--c-pend-bd);}
+.sb.emprocesso{background:var(--c-proc-bg);color:var(--c-proc);border:1px solid var(--c-proc-bd);}
+.sb.ramado{background:var(--c-ram-bg);color:var(--c-ram);border:1px solid var(--c-ram-bd);}
+.sb.entregue{background:var(--c-entg-bg);color:var(--c-entg);border:1px solid var(--c-entg-bd);}
+.sb-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.pendente .sb-dot{background:var(--c-pend);}
+.emprocesso .sb-dot{background:var(--c-proc);}
+.ramado .sb-dot{background:var(--c-ram);}
+.entregue .sb-dot{background:var(--c-entg);}
+.sdw{position:relative;display:inline-block;}
+.sdd{display:none;position:absolute;top:calc(100% + 5px);left:0;background:var(--c-surface);border:1px solid var(--c-border);border-radius:8px;box-shadow:var(--shadow-md);z-index:300;min-width:150px;overflow:hidden;}
+.sdd.open{display:block;}
+.sopt{display:flex;align-items:center;gap:8px;padding:9px 13px;font-size:12px;font-weight:600;cursor:pointer;transition:background .12s;border-bottom:1px solid #f5f0ea;}
+.sopt:last-child{border-bottom:none;}
+.sopt:hover{background:var(--c-bg);}
+.sopt-d{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+/* HTS KANBAN */
+.hts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+.hts-col{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);}
+.hts-h{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid;}
+.hts-h.h1{background:var(--hts1-bg);border-color:var(--hts1);}
+.hts-h.h2{background:var(--hts2-bg);border-color:var(--hts2);}
+.hts-h.h3{background:var(--hts3-bg);border-color:var(--hts3);}
+.hts-h.h4{background:var(--hts4-bg);border-color:var(--hts4);}
+.hts-t{font-family:var(--fd);font-size:19px;font-weight:800;letter-spacing:1px;}
+.h1 .hts-t{color:var(--hts1);}.h2 .hts-t{color:var(--hts2);}.h3 .hts-t{color:var(--hts3);}.h4 .hts-t{color:var(--hts4);}
+.hts-ct{font-size:10px;font-weight:700;padding:2px 7px;border-radius:9px;}
+.h1 .hts-ct{background:rgba(194,65,12,.1);color:var(--hts1);}
+.h2 .hts-ct{background:rgba(29,78,216,.1);color:var(--hts2);}
+.h3 .hts-ct{background:rgba(21,128,61,.1);color:var(--hts3);}
+.h4 .hts-ct{background:rgba(124,58,237,.1);color:var(--hts4);}
+.hts-body{padding:10px;min-height:100px;display:flex;flex-direction:column;gap:7px;}
+.hts-empty{text-align:center;padding:20px 10px;color:var(--c-muted);font-size:12px;opacity:.5;}
+.hc{background:#faf8f5;border:1px solid var(--c-border);border-radius:7px;padding:10px 12px;transition:box-shadow .16s,transform .16s;cursor:grab;user-select:none;}
+.hc:hover{box-shadow:var(--shadow);transform:translateY(-1px);}
+.hc.dragging{opacity:.4;cursor:grabbing;}
+.hc.drag-over{border:2px dashed var(--c-brand);background:var(--c-brand-lt);}
+.drag-handle{color:var(--c-muted);font-size:14px;opacity:.5;cursor:grab;}
+.hc-prog{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--c-brand);margin-bottom:2px;}
+.hc-cli{font-size:12px;font-weight:600;margin-bottom:2px;}
+.hc-info{font-size:11px;color:var(--c-muted);display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px;}
+.hc-acts{display:flex;flex-wrap:wrap;gap:5px;}
+.hts-fila-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.3px;}
+.hfb-fila{background:#f0f9ff;color:#0369a1;border:1px solid #bae6fd;}
+.hfb-proc{background:#eff6ff;color:#1d4ed8;border:1px solid #93c5fd;}
+.hbtn{font-size:10px;padding:3px 8px;border-radius:4px;border:none;cursor:pointer;font-family:var(--fb);font-weight:600;transition:all .14s;}
+.hbtn:hover{filter:brightness(.9);}
+.hbtn.bh1{background:var(--hts1-bg);color:var(--hts1);border:1px solid var(--hts1-bd);}
+.hbtn.bh2{background:var(--hts2-bg);color:var(--hts2);border:1px solid var(--hts2-bd);}
+.hbtn.bh3{background:var(--hts3-bg);color:var(--hts3);border:1px solid var(--hts3-bd);}
+.hbtn.bh4{background:var(--hts4-bg);color:var(--hts4);border:1px solid var(--hts4-bd);}
+.hbtn.bconc{background:var(--c-conc-bg);color:var(--c-conc);border:1px solid var(--c-conc-bd);font-weight:700;}
+.hbtn.brem{background:#fef2f2;color:var(--c-cancel);border:1px solid var(--c-cancel-bd);}
+/* CONCLUSÃO */
+.conc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.conc-col{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);}
+.conc-h{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid;}
+.conc-h.cc{background:var(--c-conc-bg);border-color:var(--c-conc);}
+.conc-h.ce{background:var(--c-entg-bg);border-color:var(--c-entg);}
+.conc-ht{font-family:var(--fd);font-size:17px;font-weight:800;}
+.cc .conc-ht{color:var(--c-conc);}.ce .conc-ht{color:var(--c-entg);}
+.conc-ct{font-size:10px;font-weight:700;padding:2px 7px;border-radius:9px;}
+.cc .conc-ct{background:rgba(15,118,110,.1);color:var(--c-conc);}
+.ce .conc-ct{background:rgba(21,128,61,.1);color:var(--c-entg);}
+.conc-body{padding:10px;min-height:80px;display:flex;flex-direction:column;gap:6px;}
+.conc-empty{text-align:center;padding:20px 10px;color:var(--c-muted);font-size:12px;opacity:.5;}
+.cc-card{background:#faf8f5;border:1px solid var(--c-border);border-radius:7px;padding:10px 12px;}
+.cc-card:hover{background:var(--c-hover);}
+.cc-prog{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--c-brand);}
+.cc-cli{font-size:12px;font-weight:600;}
+.cc-info{font-size:11px;color:var(--c-muted);margin-top:2px;}
+.cc-acts{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;}
+.cbtn{font-size:10px;padding:3px 9px;border-radius:4px;border:none;cursor:pointer;font-family:var(--fb);font-weight:600;transition:all .14s;}
+.cbtn:hover{filter:brightness(.9);}
+.cbtn-c{background:var(--c-conc-bg);color:var(--c-conc);border:1px solid var(--c-conc-bd);}
+.cbtn-e{background:var(--c-entg-bg);color:var(--c-entg);border:1px solid var(--c-entg-bd);}
+.cbtn-x{background:#fef2f2;color:var(--c-cancel);border:1px solid var(--c-cancel-bd);}
+.cbtn-v{background:#f8fafc;color:#475569;border:1px solid #cbd5e1;}
+.aguard-faixa{background:var(--c-brand-lt);border:1px solid var(--c-brand-bd);border-radius:var(--r);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--c-brand);font-weight:600;}
+.peso-chip{display:inline-flex;align-items:center;gap:5px;background:var(--c-proc-bg);border:1px solid var(--c-proc-bd);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--c-proc);}
+.filters{display:flex;gap:7px;margin-bottom:13px;flex-wrap:wrap;align-items:center;}
+.fb{padding:5px 13px;border-radius:18px;border:1.5px solid var(--c-border);background:var(--c-surface);color:var(--c-muted);font-family:var(--fb);font-size:12px;font-weight:500;cursor:pointer;transition:all .16s;}
+.fb:hover{border-color:var(--c-ink2);color:var(--c-ink);}
+.fb.on{background:var(--c-ink);border-color:var(--c-ink);color:#fff;}
+.fb.fp.on{background:var(--c-pend);border-color:var(--c-pend);}
+.fb.fc.on{background:var(--c-proc);border-color:var(--c-proc);}
+.fb.fr.on{background:var(--c-ram);border-color:var(--c-ram);}
+.fb.fe.on{background:var(--c-entg);border-color:var(--c-entg);}
+.sw{margin-left:auto;position:relative;}
+.sw input{padding-left:28px;width:190px;font-size:12.5px;}
+.si{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--c-muted);font-size:13px;pointer-events:none;}
+.empty{text-align:center;padding:36px 16px;color:var(--c-muted);}
+.empty-i{font-size:32px;opacity:.28;margin-bottom:7px;}
+.empty-t{font-size:13px;}
+.toast{position:fixed;bottom:18px;right:18px;padding:10px 16px;border-radius:8px;font-weight:600;font-size:13px;box-shadow:var(--shadow-md);opacity:0;transform:translateY(8px);transition:all .22s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.ok{background:#15803d;color:#fff;}
+.toast.info{background:var(--c-ink2);color:#fff;}
+.toast.warn{background:var(--c-brand);color:#fff;}
+.toast.err{background:var(--c-cancel);color:#fff;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:var(--c-surface);border-radius:12px;box-shadow:var(--shadow-md);width:90%;max-width:420px;overflow:hidden;}
+.modal-h{background:var(--c-ink2);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;}
+.modal-h h3{font-family:var(--fd);font-size:16px;font-weight:700;color:#fff;letter-spacing:.5px;text-transform:uppercase;}
+.modal-x{background:none;border:none;color:#888;font-size:18px;cursor:pointer;}
+.modal-x:hover{color:#fff;}
+.modal-b{padding:20px;display:flex;flex-direction:column;gap:13px;}
+.modal-f{padding:14px 18px;border-top:1px solid var(--c-border);display:flex;justify-content:flex-end;gap:8px;}
+/* ÁREA DO CLIENTE */
+.cli-grid{display:grid;grid-template-columns:260px 1fr;gap:16px;min-height:500px;}
+.cli-lista{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden;}
+.cli-lista-h{padding:12px 16px;border-bottom:1px solid var(--c-border);background:#faf9f7;font-family:var(--fd);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--c-ink2);}
+.cli-item{padding:11px 16px;border-bottom:1px solid #f5f0ea;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:background .14s;}
+.cli-item:last-child{border-bottom:none;}
+.cli-item:hover{background:var(--c-hover);}
+.cli-item.ativo{background:var(--c-brand-lt);border-left:3px solid var(--c-brand);}
+.cli-item-nome{font-size:13px;font-weight:600;}
+.cli-item-ct{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--c-brand);}
+.cli-detalhe{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden;}
+.cli-det-h{padding:16px 20px;border-bottom:1px solid var(--c-border);background:#faf9f7;display:flex;align-items:center;gap:14px;}
+.cli-det-nome{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--c-ink2);}
+.cli-det-tel{font-size:12px;color:var(--c-muted);}
+.cli-stats{display:flex;gap:12px;padding:14px 20px;border-bottom:1px solid var(--c-border);background:var(--c-bg);flex-wrap:wrap;}
+.cli-stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:8px;padding:10px 16px;text-align:center;}
+.cli-stat-v{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--c-brand);}
+.cli-stat-l{font-size:10px;color:var(--c-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.cli-empty-sel{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;color:var(--c-muted);gap:10px;}
+/* EXPORT */
+.export-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);padding:11px 16px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
+.export-bar .eb-title{font-size:11px;color:var(--c-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-right:4px;}
+.btn-csv{background:#15803d;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .16s;}
+.btn-csv:hover{background:#166534;transform:translateY(-1px);}
+.btn-pdf{background:#1d4ed8;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .16s;}
+.btn-pdf:hover{background:#1e40af;transform:translateY(-1px);}
+/* ── REG TABS ─────────────────────────────────────────────── */
+.reg-tabs-wrap{display:flex;align-items:center;gap:0;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r) var(--r) 0 0;border-bottom:none;overflow:hidden;margin-bottom:0;}
+.reg-tabs{display:flex;overflow-x:auto;flex:1;}
+.reg-tab{padding:10px 18px;font-family:var(--fd);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--c-muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .16s;display:flex;align-items:center;gap:6px;user-select:none;border-right:1px solid var(--c-border);}
+.reg-tab:hover{color:var(--c-ink);background:var(--c-hover);}
+.reg-tab.active{color:var(--c-brand);border-bottom-color:var(--c-brand);background:var(--c-brand-lt);}
+.reg-tab .rt-badge{font-size:10px;font-weight:800;padding:1px 6px;border-radius:9px;background:var(--c-border);color:var(--c-muted);}
+.reg-tab.active .rt-badge{background:var(--c-brand);color:#fff;}
+.reg-tab-new{padding:9px 16px;font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:.3px;color:var(--c-proc);background:var(--c-proc-bg);border:none;border-left:1px solid var(--c-border);cursor:pointer;white-space:nowrap;transition:all .16s;text-transform:uppercase;}
+.reg-tab-new:hover{background:var(--c-proc);color:#fff;}
+.reg-painel-box{background:var(--c-surface);border:1px solid var(--c-border);border-radius:0 0 var(--r) var(--r);margin-bottom:18px;}
+.reg-form-area{padding:16px 18px;border-bottom:1px solid var(--c-border);background:#faf9f7;}
+.reg-form-titulo{font-family:var(--fd);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--c-ink2);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.fg-reg2{display:grid;grid-template-columns:.55fr .9fr .75fr .6fr 1.3fr auto;gap:10px;align-items:end;}
+.reg-empty-cli{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:var(--c-muted);gap:10px;}
+.fb-cli{border-radius:18px;}
+.tobs{cursor:pointer;max-width:220px;}
+.tobs:hover{background:var(--c-hover);}
+.tobs-txt{font-size:12px;color:var(--c-ink2);}
+.tobs-add{font-size:11px;color:var(--c-muted);opacity:.55;}
+.obs-note{font-size:11px;color:var(--c-brand);font-style:italic;margin-bottom:7px;cursor:pointer;display:flex;align-items:flex-start;gap:4px;}
+.obs-note:hover{opacity:.75;}
+@media(max-width:900px){.fg-reg2{grid-template-columns:1fr 1fr;}.fg-reg2 button{grid-column:1/-1;}}
+.print-header{display:none;}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .hdr,.tabs,.filters,.sw,.tac,.aguard-faixa,.hc-acts,.cc-acts,.btn,.btn-x,.btn-r,.btn-g,.cbtn,.hbtn,.sdd,.sdw button,.print-bar,.overlay,#aguard-box,#classif-box,.drag-handle,.export-bar{display:none!important;}
+  body{background:#fff!important;font-size:11px!important;}
+  .wrap{padding:8px!important;max-width:100%!important;}
+  .page{display:none!important;}
+  .page.print-on{display:block!important;}
+  .card{box-shadow:none!important;border:1px solid #ccc!important;margin-bottom:10px!important;break-inside:avoid;}
+  .card-h{background:#f0f0f0!important;padding:7px 12px!important;}
+  table{font-size:10.5px!important;}
+  thead th{background:#e8e8e8!important;padding:5px 9px!important;font-size:9px!important;}
+  tbody td{padding:5px 9px!important;}
+  .sb{border:1px solid #bbb!important;padding:2px 6px!important;font-size:9px!important;background:none!important;}
+  .hts-grid{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:7px!important;}
+  .conc-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;}
+  .hts-h,.conc-h{padding:7px 10px!important;}
+  .hts-body,.conc-body{padding:6px!important;min-height:unset!important;}
+  .hts-col,.conc-col{break-inside:avoid;}
+  .hc,.cc-card{padding:6px 8px!important;margin-bottom:4px!important;border:1px solid #ddd!important;box-shadow:none!important;}
+  .hts-fila-badge{font-size:9px!important;padding:1px 5px!important;border:1px solid #bbb!important;}
+  .peso-chip{border:1px solid #bbb!important;font-size:9px!important;}
+  .print-header{display:block!important;padding:6px 0 12px;border-bottom:2px solid #1c1917;margin-bottom:12px;}
+  .ph-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:1px;text-transform:uppercase;}
+  .ph-section{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#444;}
+  .ph-meta{font-size:10px;color:#666;margin-top:2px;}
+  @page{margin:12mm;size:A4;}
+}
+@media(max-width:900px){
+  .hts-grid{grid-template-columns:1fr 1fr;}
+  .conc-grid{grid-template-columns:1fr;}
+  .fg-reg{grid-template-columns:1fr 1fr 1fr;}
+  .btn-r,.btn-g{grid-column:1/-1;}
+  .hdr-stats{display:none;}
+  .cli-grid{grid-template-columns:1fr;}
+}
+@keyframes sIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.ani{animation:sIn .18s ease;}
+
+/* AUTENTICAÇÃO / PERFIS */
+.auth-gate{position:fixed;inset:0;background:linear-gradient(135deg,#1c1917,#292524);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px}.auth-gate.hidden{display:none}.auth-card{width:min(430px,100%);background:#fff;border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.35);overflow:hidden}.auth-brand{background:#1c1917;padding:24px;text-align:center}.auth-brand strong{font-family:var(--fd);font-size:28px;color:#fff;letter-spacing:1px}.auth-brand span{display:block;color:#fb923c;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin-top:3px}.auth-body{padding:24px}.auth-body h2{font-family:var(--fd);font-size:20px;margin-bottom:16px}.auth-grid{display:grid;gap:12px}.auth-msg{font-size:12px;min-height:18px;margin-top:10px}.auth-switch{font-size:12px;color:var(--c-muted);text-align:center;margin-top:14px}.auth-switch button{border:0;background:none;color:var(--c-brand);font-weight:700;cursor:pointer}.hdr-user{display:flex;align-items:center;gap:10px;margin-left:12px}.hdr-user-info{text-align:right}.hdr-user-name{font-size:11px;color:#fff;font-weight:700;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hdr-user-role{font-size:9px;color:#fb923c;text-transform:uppercase;letter-spacing:1px}.hdr-logout{border:1px solid #57534e;background:transparent;color:#ddd;border-radius:6px;padding:6px 9px;cursor:pointer;font-size:11px}.role-hidden{display:none!important}.client-only-view .print-bar{display:none!important}.client-only-view .cli-lista{display:none}.client-only-view .cli-grid{grid-template-columns:1fr}.client-only-view .cli-detalhe{min-height:300px}.auth-note{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:9px 10px;border-radius:6px;font-size:11px;line-height:1.45}
+
+</style>
+</head>
+<body>
+
+<div class="auth-gate" id="auth-gate">
+  <div class="auth-card">
+    <div class="auth-brand"><strong>CStextil</strong><span>Gestão de Tingimentos</span></div>
+    <div class="auth-body">
+      <div id="login-box">
+        <h2>Entrar no sistema</h2>
+        <div class="auth-grid">
+          <div class="fgr"><label class="lbl">E-mail</label><input id="auth-email" type="email" autocomplete="email" placeholder="seu@email.com"></div>
+          <div class="fgr"><label class="lbl">Senha</label><input id="auth-pass" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
+          <button class="btn btn-r" style="justify-content:center" onclick="login()">Entrar</button>
+        </div>
+        <div class="auth-msg" id="auth-msg"></div>
+        <div class="auth-switch">Cliente ainda sem senha? <button onclick="showSignup(true)">Criar acesso</button></div>
+      </div>
+      <div id="signup-box" style="display:none">
+        <h2>Criar acesso de cliente</h2>
+        <div class="auth-note">Use o mesmo e-mail informado pela CS Têxtil no seu cadastro. Assim seus pedidos serão vinculados automaticamente.</div>
+        <div class="auth-grid" style="margin-top:12px">
+          <div class="fgr"><label class="lbl">Nome</label><input id="signup-name" type="text" placeholder="Seu nome"></div>
+          <div class="fgr"><label class="lbl">E-mail</label><input id="signup-email" type="email" autocomplete="email" placeholder="cliente@empresa.com"></div>
+          <div class="fgr"><label class="lbl">Senha</label><input id="signup-pass" type="password" autocomplete="new-password" minlength="6" placeholder="Mínimo 6 caracteres"></div>
+          <button class="btn btn-g" style="justify-content:center" onclick="signupClient()">Criar acesso</button>
+        </div>
+        <div class="auth-msg" id="signup-msg"></div>
+        <div class="auth-switch"><button onclick="showSignup(false)">← Voltar para login</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<header class="hdr">
+  <div class="hdr-brand">
+    <span class="hdr-name">CStextil</span>
+    <span class="hdr-tag">Tingimentos</span>
+  </div>
+  <div class="hdr-stats">
+    <div class="hs"><div class="hs-v or" id="hs-reg">0</div><div class="hs-l">Registros</div></div>
+    <div class="hs"><div class="hs-v bl" id="hs-hts">0</div><div class="hs-l">Nas HTS</div></div>
+    <div class="hs"><div class="hs-v gr" id="hs-conc">0</div><div class="hs-l">Concluídos</div></div>
+    <div class="hs"><div class="hs-v re" id="hs-canc">0</div><div class="hs-l">Cancelados</div></div>
+  </div>
+  <div class="hdr-user" id="hdr-user" style="display:none">
+    <div class="hdr-user-info"><div class="hdr-user-name" id="hdr-user-name"></div><div class="hdr-user-role" id="hdr-user-role"></div></div>
+    <button class="hdr-logout" onclick="logout()">Sair</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tab active" data-staff="1" onclick="goTab('registro',this)">① Registro <span class="badge" id="b-reg">0</span></div>
+  <div class="tab" data-staff="1" onclick="goTab('hts',this)">② Fila HTS <span class="badge" id="b-hts">0</span></div>
+  <div class="tab" data-staff="1" onclick="goTab('conclusao',this)">③ Conclusão <span class="badge" id="b-conc">0</span></div>
+  <div class="tab" data-staff="1" onclick="goTab('clientes',this)">👥 Clientes</div>
+  <div class="tab" onclick="goTab('area-cliente',this)">📁 Área do Cliente</div>
+</nav>
+
+<div class="wrap">
+  <div class="print-bar" style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);padding:12px 16px;box-shadow:var(--shadow-sm)">
+    <span style="font-size:11px;color:var(--c-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-right:4px">🖨 Imprimir:</span>
+    <button class="btn btn-r" style="font-size:12px;padding:7px 15px" onclick="imprimir('registro')">Registro de Pedidos</button>
+    <button class="btn btn-r" style="font-size:12px;padding:7px 15px" onclick="imprimir('hts')">Fila HTS</button>
+    <button class="btn btn-r" style="font-size:12px;padding:7px 15px" onclick="imprimir('conclusao')">Conclusão / Resumo</button>
+    <button class="btn btn-r" style="font-size:12px;padding:7px 15px;background:var(--c-ink2)" onclick="imprimir('todos')">Relatório Completo</button>
+  </div>
+  <div class="print-header" id="ph">
+    <div class="ph-title">CStextil – Tingimentos &nbsp;<span class="ph-section" id="ph-sec"></span></div>
+    <div class="ph-meta" id="ph-meta"></div>
+  </div>
+
+<!-- PASSO 1 — REGISTRO -->
+<div class="page on" id="page-registro">
+  <div class="export-bar">
+    <span class="eb-title">📤 Exportar:</span>
+    <button class="btn-csv" onclick="exportCSV('registro')">⬇ CSV / Excel</button>
+    <button class="btn-pdf" onclick="exportPDF('registro')">⬇ PDF</button>
+  </div>
+
+  <!-- Abas de clientes -->
+  <div class="reg-tabs-wrap">
+    <div class="reg-tabs" id="reg-tabs"></div>
+    <button class="reg-tab-new" onclick="abrirModalNovoCliente()" title="Novo cliente">＋ Novo Cliente</button>
+  </div>
+
+  <!-- Painel do cliente selecionado -->
+  <div id="reg-painel"></div>
+</div>
+
+<!-- MODAL NOVO CLIENTE (no registro) -->
+<div class="overlay" id="modal-novo-cli">
+  <div class="modal">
+    <div class="modal-h"><h3>Novo Cliente</h3><button class="modal-x" onclick="fecharModalNovoCliente()">✕</button></div>
+    <div class="modal-b">
+      <div class="fgr"><label class="lbl">Nome / Empresa</label><input type="text" id="nc-nm" placeholder="Nome do cliente"></div>
+      <div class="fgr"><label class="lbl">Contato</label><input type="text" id="nc-tel" placeholder="(11) 99999-0000"></div>
+      <div class="fgr"><label class="lbl">E-mail de acesso</label><input type="email" id="nc-email" placeholder="cliente@empresa.com"></div>
+      <div class="fgr"><label class="lbl">Observação</label><input type="text" id="nc-obs" placeholder="Opcional..."></div>
+    </div>
+    <div class="modal-f">
+      <button class="btn-x" onclick="fecharModalNovoCliente()">Cancelar</button>
+      <button class="btn btn-g" onclick="salvarNovoClienteReg()">✓ Cadastrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASSO 2 — FILA HTS -->
+<div class="page" id="page-hts">
+  <div class="export-bar">
+    <span class="eb-title">📤 Exportar Fila HTS:</span>
+    <button class="btn-csv" onclick="exportCSV('hts')">⬇ CSV / Excel</button>
+    <button class="btn-pdf" onclick="exportPDF('hts')">⬇ PDF</button>
+  </div>
+  <div id="aguard-box"></div>
+  <div class="hts-grid" id="hts-grid"></div>
+  <div class="card">
+    <div class="card-h"><h2>📋 Todos os registros nas HTS</h2>
+      <div class="sw" style="margin-left:0"><span class="si">⌕</span><input type="text" id="s-hts" placeholder="Buscar..." oninput="renderHTS()"></div>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Ordem</th><th>Nº Prog.</th><th>Cliente</th><th>Artigo</th><th>Cor</th><th>Peças</th><th>HTS</th><th>Situação</th><th>Mover para</th><th></th></tr></thead>
+        <tbody id="tb-hts-lista"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PASSO 3 — CONCLUSÃO -->
+<div class="page" id="page-conclusao">
+  <div id="classif-box"></div>
+  <div class="conc-grid" id="conc-grid"></div>
+  <div class="card">
+    <div class="card-h"><h2>📊 Resumo Analítico</h2></div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Nº Prog.</th><th>Cliente</th><th>Artigo</th><th>Cor</th><th>Peças</th><th>Peso Total (kg)</th><th>HTS Usada</th><th>Status Final</th></tr></thead>
+        <tbody id="tb-resumo"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENTES -->
+<div class="page" id="page-clientes">
+  <div class="card">
+    <div class="card-h"><h2>➕ Cadastrar Cliente</h2></div>
+    <div class="card-b">
+      <div class="fg fg-cli">
+        <div class="fgr"><label class="lbl">Nome / Empresa</label><input type="text" id="c-nm" placeholder="Nome do cliente"></div>
+        <div class="fgr"><label class="lbl">Contato</label><input type="text" id="c-tel" placeholder="(11) 99999-0000"></div>
+        <div class="fgr"><label class="lbl">E-mail de acesso</label><input type="email" id="c-email" placeholder="cliente@empresa.com"></div>
+        <div class="fgr"><label class="lbl">Observação</label><input type="text" id="c-obs" placeholder="Opcional..."></div>
+        <button class="btn btn-g" onclick="addCliente()">+ Cadastrar</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-h"><h2>👥 Lista de Clientes</h2></div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>#</th><th>Nome</th><th>Contato</th><th>Pedidos</th><th>Cadastro</th><th></th></tr></thead>
+        <tbody id="tb-cli"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ÁREA DO CLIENTE -->
+<div class="page" id="page-area-cliente">
+  <div class="cli-grid">
+    <div class="cli-lista">
+      <div class="cli-lista-h">👥 Selecione o Cliente</div>
+      <div id="cli-lista-itens"></div>
+    </div>
+    <div class="cli-detalhe" id="cli-detalhe">
+      <div class="cli-empty-sel">
+        <div style="font-size:36px;opacity:.2">📁</div>
+        <div style="font-size:13px">Selecione um cliente para ver seus pedidos</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- MODAL PESO -->
+<div class="overlay" id="modal-peso">
+  <div class="modal">
+    <div class="modal-h"><h3 id="mp-titulo">Concluir Pedido</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-b">
+      <div class="fgr"><label class="lbl">Nº Programa</label><input type="text" id="mp-prog" disabled></div>
+      <div class="fgr"><label class="lbl">Cliente</label><input type="text" id="mp-cli" disabled></div>
+      <div class="fgr"><label class="lbl">Peso Total das Peças (kg)</label><input type="number" id="mp-peso" placeholder="Ex: 142.5" step="0.1" min="0"></div>
+    </div>
+    <div class="modal-f">
+      <button class="btn-x" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-g" onclick="confirmarConclusao()" id="mp-btn">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL='https://ihlmyjjoglmvqjbcavef.supabase.co';
+const SUPABASE_KEY='sb_publishable_xuZRbPCetRj4nX0fB01Y1w_9nkavPU7';
+let authSession=null,currentUser=null,currentProfile=null;
+
+function authHeaders(json=true){
+  const h={apikey:SUPABASE_KEY};
+  if(authSession?.access_token)h.Authorization='Bearer '+authSession.access_token;
+  if(json){h['Content-Type']='application/json';h.Prefer='return=representation';}
+  return h;
+}
+function authMsg(id,msg,ok=false){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.color=ok?'#15803d':'#991b1b';}}
+function showSignup(on){document.getElementById('login-box').style.display=on?'none':'block';document.getElementById('signup-box').style.display=on?'block':'none';authMsg('auth-msg','');authMsg('signup-msg','');}
+async function login(){
+  const email=document.getElementById('auth-email').value.trim(),password=document.getElementById('auth-pass').value;
+  if(!email||!password){authMsg('auth-msg','Informe e-mail e senha.');return;}
+  authMsg('auth-msg','Entrando...',true);
+  try{
+    const r=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const j=await r.json(); if(!r.ok)throw new Error(j.error_description||j.msg||'Não foi possível entrar.');
+    authSession=j;localStorage.setItem('cst_auth_session',JSON.stringify(j));await bootAuthenticated();
+  }catch(e){authMsg('auth-msg',e.message||'Erro ao entrar.');}
+}
+async function signupClient(){
+  const full_name=document.getElementById('signup-name').value.trim(),email=document.getElementById('signup-email').value.trim(),password=document.getElementById('signup-pass').value;
+  if(!full_name||!email||password.length<6){authMsg('signup-msg','Preencha nome, e-mail e uma senha de pelo menos 6 caracteres.');return;}
+  authMsg('signup-msg','Criando acesso...',true);
+  try{
+    const r=await fetch(`${SUPABASE_URL}/auth/v1/signup`,{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password,data:{full_name}})});
+    const j=await r.json();if(!r.ok)throw new Error(j.msg||j.error_description||'Não foi possível criar o acesso.');
+    if(j.access_token){authSession=j;localStorage.setItem('cst_auth_session',JSON.stringify(j));await bootAuthenticated();}
+    else authMsg('signup-msg','Conta criada. Verifique seu e-mail para confirmar o acesso.',true);
+  }catch(e){authMsg('signup-msg',e.message||'Erro ao criar acesso.');}
+}
+async function refreshSession(){
+  if(!authSession?.refresh_token)return false;
+  try{const r=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:authSession.refresh_token})});if(!r.ok)return false;authSession=await r.json();localStorage.setItem('cst_auth_session',JSON.stringify(authSession));return true;}catch(e){return false;}
+}
+async function sbFetch(path,opts={},retry=true){
+  const r=await fetch(SUPABASE_URL+path,{...opts,headers:{...authHeaders(opts.method!=='GET'),...(opts.headers||{})}});
+  if(r.status===401&&retry&&await refreshSession())return sbFetch(path,opts,false);
+  let j=null;try{j=await r.json();}catch(e){}
+  if(!r.ok)throw new Error(j?.message||j?.msg||j?.error||`Erro ${r.status}`);return j;
+}
+function mapClient(c){return{id:c.id,nome:c.name||'',tel:c.phone||'',email:c.email||'',obs:c.notes||'',criado:(c.created_at||'').slice(0,10),authUserId:c.auth_user_id||null};}
+function mapOrder(o){return{id:o.id,prog:o.program||'',clienteNome:o.clients?.name||clientes.find(c=>c.id===o.client_id)?.nome||'',clientId:o.client_id,artigo:o.article||'',cor:o.color||'',qtd:o.quantity||0,obs:o.notes||'',status:o.status||'pendente',hts:o.hts||'',htsStatus:o.hts_status||'',pesoKg:o.weight_kg??'',etapa:o.stage||'registro',criado:(o.created_at||'').slice(0,10)};}
+function clientPayload(d){return{name:d.nome,phone:d.tel||null,email:d.email||null,notes:d.obs||null};}
+function orderPayload(d){const x={};const mp={prog:'program',artigo:'article',cor:'color',qtd:'quantity',obs:'notes',status:'status',hts:'hts',htsStatus:'hts_status',pesoKg:'weight_kg',etapa:'stage'};for(const[k,v]of Object.entries(d))if(mp[k])x[mp[k]]=v===''?null:v;if(d.clienteNome){const c=clientes.find(c=>c.nome===d.clienteNome);if(c)x.client_id=c.id;}if(d.clientId)x.client_id=d.clientId;return x;}
+async function apiGet(p){
+  try{
+    if(p==='/api/clientes')return (await sbFetch('/rest/v1/clients?select=*&order=name.asc',{method:'GET'})).map(mapClient);
+    if(p==='/api/pedidos')return (await sbFetch('/rest/v1/orders?select=*,clients(name)&order=created_at.desc',{method:'GET'})).map(mapOrder);
+  }catch(e){console.error(e);toast('Erro ao carregar dados: '+e.message,'warn');}return null;
+}
+async function apiPost(p,d){
+  try{
+    if(p==='/api/clientes'){const j=await sbFetch('/rest/v1/clients',{method:'POST',body:JSON.stringify(clientPayload(d))});return mapClient(j[0]);}
+    if(p==='/api/pedidos'){const j=await sbFetch('/rest/v1/orders?select=*,clients(name)',{method:'POST',body:JSON.stringify(orderPayload(d))});return mapOrder(j[0]);}
+  }catch(e){console.error(e);toast('Não foi possível salvar: '+e.message,'warn');}return null;
+}
+async function apiPut(p,d){
+  try{const m=p.match(/^\/api\/pedidos\/(\d+)$/);if(m){const j=await sbFetch(`/rest/v1/orders?id=eq.${m[1]}&select=*,clients(name)`,{method:'PATCH',body:JSON.stringify(orderPayload(d))});return j?.[0]?mapOrder(j[0]):null;}}catch(e){console.error(e);toast('Não foi possível atualizar: '+e.message,'warn');}return null;
+}
+async function apiDel(p){
+  try{let m=p.match(/^\/api\/pedidos\/(\d+)$/);if(m){await sbFetch(`/rest/v1/orders?id=eq.${m[1]}`,{method:'DELETE'});return{ok:true};}m=p.match(/^\/api\/clientes\/(\d+)$/);if(m){await sbFetch(`/rest/v1/clients?id=eq.${m[1]}`,{method:'DELETE'});return{ok:true};}}catch(e){console.error(e);toast('Não foi possível remover: '+e.message,'warn');}return null;
+}
+
+let pedidos=[],clientes=[],clienteSelecionado=null;
+let htsOrdem={'HTS-1':[],'HTS-2':[],'HTS-3':[],'HTS-4':[]};
+function lsGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function saveLocal(){lsSet('cst_htsOrdem',htsOrdem);}
+
+async function loadProfile(){
+  const u=await sbFetch('/auth/v1/user',{method:'GET'});currentUser=u;
+  const rows=await sbFetch(`/rest/v1/profiles?id=eq.${encodeURIComponent(u.id)}&select=*`,{method:'GET'});currentProfile=rows?.[0]||{id:u.id,role:'client',client_id:null,full_name:u.email};
+}
+function applyRoleUI(){
+  const role=currentProfile?.role||'client',staff=role==='admin'||role==='employee';
+  document.querySelectorAll('[data-staff="1"]').forEach(el=>el.classList.toggle('role-hidden',!staff));
+  document.querySelector('.wrap')?.classList.toggle('client-only-view',!staff);
+  document.getElementById('hdr-user').style.display='flex';
+  document.getElementById('hdr-user-name').textContent=currentProfile?.full_name||currentUser?.email||'';
+  document.getElementById('hdr-user-role').textContent={admin:'Administrador',employee:'Funcionário',client:'Cliente'}[role]||role;
+  if(!staff){clienteSelecionado=currentProfile?.client_id||null;document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById('page-area-cliente').classList.add('on');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));const a=[...document.querySelectorAll('.tab')].find(t=>t.textContent.includes('Área do Cliente'));if(a)a.classList.add('active');}
+}
+async function bootAuthenticated(){
+  try{await loadProfile();document.getElementById('auth-gate').classList.add('hidden');applyRoleUI();await initData();}
+  catch(e){console.error(e);authMsg('auth-msg','Sessão inválida. Entre novamente.');document.getElementById('auth-gate').classList.remove('hidden');localStorage.removeItem('cst_auth_session');}
+}
+async function logout(){
+  try{if(authSession?.access_token)await fetch(`${SUPABASE_URL}/auth/v1/logout`,{method:'POST',headers:authHeaders(false)});}catch(e){}
+  authSession=null;currentUser=null;currentProfile=null;localStorage.removeItem('cst_auth_session');location.reload();
+}
+async function initData(){
+  const[rp,rc]=await Promise.all([apiGet('/api/pedidos'),apiGet('/api/clientes')]);
+  pedidos=rp||[];clientes=rc||[];
+  const ord=lsGet('cst_htsOrdem');if(ord)htsOrdem=ord;
+  if(currentProfile?.role==='client')clienteSelecionado=currentProfile.client_id||null;
+  refreshDL();renderAll();
+}
+async function init(){
+  try{authSession=JSON.parse(localStorage.getItem('cst_auth_session')||'null');}catch(e){authSession=null;}
+  if(authSession?.access_token)await bootAuthenticated();
+  else document.getElementById('auth-gate').classList.remove('hidden');
+}
+
+// ORDEM HTS
+function getOrdemHTS(hts){
+  const naHTS=pedidos.filter(p=>p.etapa==='hts'&&p.hts===hts).map(p=>p.id);
+  const ord=(htsOrdem[hts]||[]).filter(id=>naHTS.includes(id));
+  naHTS.forEach(id=>{if(!ord.includes(id))ord.push(id);});
+  htsOrdem[hts]=ord;
+  return ord;
+}
+function saveOrdem(){lsSet('cst_htsOrdem',htsOrdem);}
+
+// HELPERS
+const CM={"azul":"#2563eb","marinho":"#1e3a8a","royal":"#1d4ed8","preto":"#1a1a1a","cinza":"#6b7280","branco":"#f1f5f9","vermelho":"#dc2626","escarlate":"#dc2626","verde":"#16a34a","bandeira":"#166534","amarelo":"#ca8a04","laranja":"#ea580c","rosa":"#db2777","roxo":"#7c3aed","bege":"#d4a574","marrom":"#78350f","mescla":"#9ca3af","grafite":"#374151","chumbo":"#334155","otico":"#e2e8f0"};
+function corHex(c){const l=c.toLowerCase();for(const[k,v]of Object.entries(CM))if(l.includes(k))return v;let h=0;for(let i=0;i<c.length;i++)h=c.charCodeAt(i)+((h<<5)-h);return`hsl(${Math.abs(h)%360},55%,45%)`;}
+function fmtD(d){return d?new Date(d+'T00:00:00').toLocaleDateString('pt-BR'):'—';}
+function today(){return new Date().toISOString().substring(0,10);}
+
+const STATUS_LIST=['pendente','emprocesso','ramado','entregue'];
+const STATUS_LBL={pendente:'Pendente',emprocesso:'Em Processo',ramado:'Ramado',entregue:'Entregue'};
+const STATUS_DOT={pendente:'var(--c-pend)',emprocesso:'var(--c-proc)',ramado:'var(--c-ram)',entregue:'var(--c-entg)'};
+const HTS=['HTS-1','HTS-2','HTS-3','HTS-4'];
+const HTS_CLS=['h1','h2','h3','h4'];
+const HTS_BCLS=['bh1','bh2','bh3','bh4'];
+const HTS_COLORS=['var(--hts1)','var(--hts2)','var(--hts3)','var(--hts4)'];
+
+let filtroReg='todos';
+let filtroRegCli='todos'; // filtro de status dentro da aba do cliente
+function goTab(id,el){
+  if(currentProfile?.role==='client'&&id!=='area-cliente')return;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('on');
+  el.classList.add('active');
+  renderAll();
+}
+
+function refreshDL(){
+  const dl=document.getElementById('cli-dl');if(!dl)return;
+  dl.innerHTML='';
+  clientes.forEach(c=>{const o=document.createElement('option');o.value=c.nome;dl.appendChild(o);});
+}
+
+async function addCliente(){
+  const nm=document.getElementById('c-nm').value.trim();
+  const tel=document.getElementById('c-tel').value.trim();
+  const email=document.getElementById('c-email').value.trim();
+  const obs=document.getElementById('c-obs').value.trim();
+  if(!nm){toast('Informe o nome!','warn');return;}
+  if(clientes.find(c=>c.nome.toLowerCase()===nm.toLowerCase())){toast('Cliente já existe!','warn');return;}
+  const novo={nome:nm,tel,email,obs,criado:today()};
+  const s=await apiPost('/api/clientes',novo);
+  if(s){clientes.push(s);}else{const mx=clientes.length?Math.max(...clientes.map(c=>c.id||0)):0;clientes.push({...novo,id:mx+1});saveLocal();}
+  refreshDL();
+  regCliAtivo=s?.id||clientes[clientes.length-1]?.id||null;
+  renderAll();toast('✓ Cliente cadastrado!','ok');
+  ['c-nm','c-tel','c-email','c-obs'].forEach(id=>document.getElementById(id).value='');
+}
+
+async function delCliente(id){
+  if(!confirm('Remover cliente?'))return;
+  await apiDel('/api/clientes/'+id);
+  clientes=clientes.filter(c=>c.id!==id);saveLocal();renderAll();refreshDL();toast('Removido.','info');
+}
+
+// ── CLIENTE ATIVO NO REGISTRO ─────────────────────────────────
+let regCliAtivo=null; // id do cliente selecionado na aba
+
+function proxCodigoCli(cliNome){
+  const pedsCli=pedidos.filter(p=>(p.clienteNome||'').toLowerCase()===cliNome.toLowerCase());
+  if(!pedsCli.length) return '001';
+  let maior=0;
+  pedsCli.forEach(p=>{const n=parseInt((p.prog||'').replace(/[^0-9]/g,''));if(!isNaN(n)&&n>maior)maior=n;});
+  return String(maior+1).padStart(3,'0');
+}
+
+function abrirModalNovoCliente(){
+  document.getElementById('nc-nm').value='';
+  document.getElementById('nc-tel').value='';
+  document.getElementById('nc-email').value='';
+  document.getElementById('nc-obs').value='';
+  document.getElementById('modal-novo-cli').classList.add('open');
+  setTimeout(()=>document.getElementById('nc-nm').focus(),100);
+}
+function fecharModalNovoCliente(){document.getElementById('modal-novo-cli').classList.remove('open');}
+document.getElementById('modal-novo-cli').addEventListener('click',e=>{if(e.target===e.currentTarget)fecharModalNovoCliente();});
+
+async function salvarNovoClienteReg(){
+  const nm=document.getElementById('nc-nm').value.trim();
+  const tel=document.getElementById('nc-tel').value.trim();
+  const email=document.getElementById('nc-email').value.trim();
+  const obs=document.getElementById('nc-obs').value.trim();
+  if(!nm){toast('Informe o nome!','warn');return;}
+  if(clientes.find(c=>c.nome.toLowerCase()===nm.toLowerCase())){toast('Cliente já existe!','warn');return;}
+  const novo={nome:nm,tel,email,obs,criado:today()};
+  const s=await apiPost('/api/clientes',novo);
+  const cli=s||(()=>{const mx=clientes.length?Math.max(...clientes.map(c=>c.id||0)):0;return{...novo,id:mx+1};})();
+  clientes.push(cli);saveLocal();refreshDL();
+  fecharModalNovoCliente();
+  regCliAtivo=cli.id;
+  renderAll();
+  toast(`✓ Cliente "${nm}" cadastrado!`,'ok');
+}
+
+function selecionarAbaReg(cliId){
+  regCliAtivo=cliId;
+  filtroRegCli='todos';
+  renderReg();
+}
+
+async function addRegistro(){
+  const cli=clientes.find(c=>c.id===regCliAtivo);
+  if(!cli){toast('Selecione um cliente!','warn');return;}
+  const prog=document.getElementById('r-prog-'+regCliAtivo)?.value.trim()||proxCodigoCli(cli.nome);
+  const art=document.getElementById('r-art-'+regCliAtivo)?.value.trim();
+  const cor=document.getElementById('r-cor-'+regCliAtivo)?.value.trim();
+  const qtd=parseInt(document.getElementById('r-qtd-'+regCliAtivo)?.value)||0;
+  const obs=document.getElementById('r-obs-'+regCliAtivo)?.value.trim()||'';
+  if(!art||!cor||!qtd){toast('Preencha artigo, cor e nº de peças!','warn');return;}
+  const novo={prog,clienteNome:cli.nome,artigo:art,cor,qtd,obs,status:'pendente',hts:'',htsStatus:'',pesoKg:'',etapa:'registro',criado:today()};
+  const s=await apiPost('/api/pedidos',novo);
+  if(s){pedidos.unshift(s);}else{const mx=pedidos.length?Math.max(...pedidos.map(p=>p.id||0)):0;pedidos.unshift({...novo,id:mx+1});saveLocal();}
+  renderAll();toast('✓ Pedido registrado!','ok');
+  // Limpa campos do formulário mas mantém aba do cliente
+  const art2=document.getElementById('r-art-'+regCliAtivo);
+  const cor2=document.getElementById('r-cor-'+regCliAtivo);
+  const qtd2=document.getElementById('r-qtd-'+regCliAtivo);
+  const obs2=document.getElementById('r-obs-'+regCliAtivo);
+  if(art2)art2.value='';
+  if(cor2)cor2.value='';
+  if(qtd2)qtd2.value='';
+  if(obs2)obs2.value='';
+}
+
+function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+async function editarObs(id){
+  const p=pedidos.find(x=>x.id===id);if(!p)return;
+  const v=prompt('Observação do pedido '+(p.prog||'')+':',p.obs||'');
+  if(v===null)return;
+  await upd(id,{obs:v.trim()});
+  toast('✓ Observação salva!','ok');
+}
+
+async function upd(id,campos){
+  const p=pedidos.find(x=>x.id===id);if(!p)return;
+  Object.assign(p,campos);
+  const r=await apiPut('/api/pedidos/'+id,campos);
+  if(!r)saveLocal();
+  renderAll();
+}
+
+async function delPedido(id){
+  if(!confirm('Remover pedido?'))return;
+  await apiDel('/api/pedidos/'+id);
+  pedidos=pedidos.filter(p=>p.id!==id);
+  HTS.forEach(h=>{htsOrdem[h]=(htsOrdem[h]||[]).filter(x=>x!==id);});
+  saveLocal();renderAll();toast('Removido.','info');
+}
+
+let ddAberto=null;
+function toggleDD(id){
+  if(ddAberto&&ddAberto!==id){const d=document.getElementById('dd-'+ddAberto);if(d)d.classList.remove('open');}
+  const dd=document.getElementById('dd-'+id);if(!dd)return;
+  dd.classList.toggle('open');ddAberto=dd.classList.contains('open')?id:null;
+}
+function closeDD(id){const d=document.getElementById('dd-'+id);if(d)d.classList.remove('open');if(ddAberto===id)ddAberto=null;}
+document.addEventListener('click',e=>{if(!e.target.closest('.sdw')&&ddAberto)closeDD(ddAberto);});
+
+function setStatus(id,st){upd(id,{status:st});toast(STATUS_LBL[st]||st,'ok');}
+
+function alocarHTS(id,hts){
+  htsOrdem[hts]=htsOrdem[hts]||[];
+  if(!htsOrdem[hts].includes(id))htsOrdem[hts].push(id);
+  saveOrdem();
+  upd(id,{hts,htsStatus:'fila',etapa:'hts'});
+  toast(`✓ Alocado na ${hts}!`,'ok');
+}
+function moverHTS(id,hts){
+  HTS.forEach(h=>{htsOrdem[h]=(htsOrdem[h]||[]).filter(x=>x!==id);});
+  htsOrdem[hts]=htsOrdem[hts]||[];
+  htsOrdem[hts].push(id);
+  saveOrdem();
+  upd(id,{hts,htsStatus:'fila'});
+  toast(`↔ Movido para ${hts}!`,'info');
+}
+function setHtsStatus(id,st){upd(id,{htsStatus:st});toast(st==='processo'?'⚙ Em processo na HTS':'🔵 Em fila','info');}
+function enviarConclusao(id){upd(id,{etapa:'aguard_conc'});toast('📬 Enviado para conclusão!','info');}
+
+// DRAG & DROP
+let dragId=null,dragHts=null;
+function onDragStart(e,id,hts){
+  dragId=id;dragHts=hts;
+  e.dataTransfer.effectAllowed='move';
+  setTimeout(()=>{const el=document.getElementById('hc-'+id);if(el)el.classList.add('dragging');},0);
+}
+function onDragEnd(e,id){
+  const el=document.getElementById('hc-'+id);if(el)el.classList.remove('dragging');
+  document.querySelectorAll('.hc').forEach(c=>c.classList.remove('drag-over'));
+}
+function onDragOver(e,id,hts){
+  e.preventDefault();
+  if(dragId===id||dragHts!==hts)return;
+  document.querySelectorAll('.hc').forEach(c=>c.classList.remove('drag-over'));
+  const el=document.getElementById('hc-'+id);if(el)el.classList.add('drag-over');
+}
+function onDrop(e,targetId,hts){
+  e.preventDefault();
+  document.querySelectorAll('.hc').forEach(c=>c.classList.remove('drag-over'));
+  if(!dragId||dragId===targetId||dragHts!==hts)return;
+  const ord=htsOrdem[hts]||[];
+  const fi=ord.indexOf(dragId),ti=ord.indexOf(targetId);
+  if(fi<0||ti<0)return;
+  ord.splice(fi,1);ord.splice(ti,0,dragId);
+  htsOrdem[hts]=[...ord];
+  saveOrdem();renderHTS();
+  toast('↕ Ordem atualizada!','info');
+  dragId=null;dragHts=null;
+}
+
+let modalId=null,modalAcao=null;
+function abrirModal(id,acao){
+  modalId=id;modalAcao=acao;
+  const p=pedidos.find(x=>x.id===id);if(!p)return;
+  document.getElementById('mp-titulo').textContent=acao==='concluido'?'Concluir Pedido':acao==='entregue'?'Marcar como Entregue':'Cancelar Pedido';
+  document.getElementById('mp-prog').value=p.prog||'—';
+  document.getElementById('mp-cli').value=p.clienteNome;
+  document.getElementById('mp-peso').value=p.pesoKg||'';
+  document.getElementById('mp-btn').textContent=acao==='concluido'?'✓ Concluir':acao==='entregue'?'✓ Marcar Entregue':'✕ Cancelar';
+  document.getElementById('mp-btn').className='btn '+(acao==='cancelado'?'btn-r':'btn-g');
+  document.getElementById('modal-peso').classList.add('open');
+  setTimeout(()=>document.getElementById('mp-peso').focus(),100);
+}
+function closeModal(){document.getElementById('modal-peso').classList.remove('open');modalId=null;modalAcao=null;}
+document.getElementById('modal-peso').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+
+async function confirmarConclusao(){
+  if(!modalId||!modalAcao)return;
+  const peso=document.getElementById('mp-peso').value;
+  await upd(modalId,{etapa:modalAcao,pesoKg:peso||''});
+  closeModal();
+  const lbl={concluido:'✓ Concluído!',entregue:'✓ Entregue!',cancelado:'Cancelado.'};
+  const tp={concluido:'ok',entregue:'ok',cancelado:'warn'};
+  toast(lbl[modalAcao],tp[modalAcao]);
+}
+
+function voltarRegistro(id){upd(id,{etapa:'registro',hts:'',htsStatus:'',pesoKg:''});toast('↩ Voltou ao registro','info');}
+
+function setF(f,el,ctx){
+  if(ctx==='reg')filtroReg=f;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');renderReg();
+}
+
+function setFCli(f,elId){
+  filtroRegCli=f;
+  // atualiza visual dos botões de filtro do cliente
+  document.querySelectorAll('.fb-cli').forEach(b=>b.classList.remove('on'));
+  const el=document.getElementById(elId);
+  if(el)el.classList.add('on');
+  renderReg();
+}
+
+function renderAll(){renderReg();renderHTS();renderConc();renderClientes();renderKPIs();renderAreaCliente();}
+
+function renderKPIs(){
+  const reg=pedidos.filter(p=>p.etapa==='registro').length;
+  const hts=pedidos.filter(p=>p.etapa==='hts').length;
+  const conc=pedidos.filter(p=>['concluido','entregue'].includes(p.etapa)).length;
+  const canc=pedidos.filter(p=>p.etapa==='cancelado').length;
+  document.getElementById('hs-reg').textContent=reg;
+  document.getElementById('hs-hts').textContent=hts;
+  document.getElementById('hs-conc').textContent=conc;
+  document.getElementById('hs-canc').textContent=canc;
+  document.getElementById('b-reg').textContent=reg;
+  document.getElementById('b-hts').textContent=hts+pedidos.filter(p=>p.etapa==='aguard_conc').length;
+  document.getElementById('b-conc').textContent=pedidos.filter(p=>['aguard_conc','concluido','entregue','cancelado'].includes(p.etapa)).length;
+}
+
+function renderReg(){
+  const tabsEl=document.getElementById('reg-tabs');
+  const painelEl=document.getElementById('reg-painel');
+  if(!tabsEl||!painelEl)return;
+
+  // Se não há clientes
+  if(!clientes.length){
+    tabsEl.innerHTML='';
+    painelEl.innerHTML=`<div class="reg-empty-cli"><div style="font-size:36px;opacity:.2">👥</div><div style="font-size:13px">Nenhum cliente cadastrado. Clique em <strong>+ Novo Cliente</strong> para começar.</div></div>`;
+    return;
+  }
+
+  // Garante que há um cliente ativo
+  if(!regCliAtivo||!clientes.find(c=>c.id===regCliAtivo)){
+    regCliAtivo=clientes[0].id;
+  }
+
+  // Renderiza abas
+  tabsEl.innerHTML=clientes.map(c=>{
+    const n=pedidos.filter(p=>p.clienteNome===c.nome&&p.etapa==='registro').length;
+    const ativo=c.id===regCliAtivo?'active':'';
+    return`<div class="reg-tab ${ativo}" onclick="selecionarAbaReg(${c.id})">
+      ${c.nome}
+      ${n>0?`<span class="rt-badge">${n}</span>`:''}
+    </div>`;
+  }).join('');
+
+  // Dados do cliente ativo
+  const cli=clientes.find(c=>c.id===regCliAtivo);
+  if(!cli){painelEl.innerHTML='';return;}
+
+  // Pedidos deste cliente ordenados por código
+  const pedsCli=pedidos
+    .filter(p=>{
+      if(p.clienteNome!==cli.nome||p.etapa!=='registro') return false;
+      if(filtroRegCli!=='todos'&&p.status!==filtroRegCli) return false;
+      return true;
+    })
+    .sort((a,b)=>{
+      const na=parseInt((a.prog||'').replace(/[^0-9]/g,''))||0;
+      const nb=parseInt((b.prog||'').replace(/[^0-9]/g,''))||0;
+      return nb-na;
+    });
+  // contagens para badges dos filtros
+  const totalCli=pedidos.filter(p=>p.clienteNome===cli.nome&&p.etapa==='registro');
+  const ctTodos=totalCli.length;
+  const ctPend=totalCli.filter(p=>p.status==='pendente').length;
+  const ctProc=totalCli.filter(p=>p.status==='emprocesso').length;
+  const ctRam=totalCli.filter(p=>p.status==='ramado').length;
+  const ctEntg=totalCli.filter(p=>p.status==='entregue').length;
+
+  const prox=proxCodigoCli(cli.nome);
+
+  function sbHtml(p){
+    const s=p.status||'pendente';
+    const opts=STATUS_LIST.filter(x=>x!==s).map(x=>`<div class="sopt" onclick="setStatus(${p.id},'${x}');closeDD(${p.id});event.stopPropagation()"><div class="sopt-d" style="background:${STATUS_DOT[x]}"></div>${STATUS_LBL[x]}</div>`).join('');
+    return`<div class="sdw"><button class="sb ${s}" onclick="toggleDD(${p.id});event.stopPropagation()"><span class="sb-dot"></span>${STATUS_LBL[s]} ▾</button><div class="sdd" id="dd-${p.id}">${opts}</div></div>`;
+  }
+
+  const rows=pedsCli.length?pedsCli.map((p,i)=>{
+    const hex=corHex(p.cor||'');
+    return`<tr class="ani">
+      <td class="tn">${i+1}</td>
+      <td class="tp">${p.prog||'—'}</td>
+      <td class="tar">${p.artigo||'—'}</td>
+      <td><div class="cc"><div class="cd" style="background:${hex}"></div>${p.cor||'—'}</div></td>
+      <td class="tq">${p.qtd||0}<span>pçs</span></td>
+      <td class="tdt">${fmtD(p.criado)}</td>
+      <td>${sbHtml(p)}</td>
+      <td class="tobs" ${currentProfile?.role!=='client'?`onclick="editarObs(${p.id})" title="Clique para editar a observação"`:''}>${p.obs?`<span class="tobs-txt">📝 ${escapeHtml(p.obs)}</span>`:(currentProfile?.role!=='client'?`<span class="tobs-add">+ observação</span>`:'—')}</td>
+      <td><div class="tac"><button class="btn-x" onclick="delPedido(${p.id})">✕</button></div></td>
+    </tr>`;
+  }).join(''):`<tr><td colspan="9"><div class="empty" style="padding:20px"><div class="empty-i">📄</div><div class="empty-t">Nenhum pedido registrado para este cliente</div></div></td></tr>`;
+
+  painelEl.innerHTML=`<div class="reg-painel-box">
+    <div class="reg-form-area">
+      <div class="reg-form-titulo">➕ Novo Pedido — ${cli.nome}
+        ${cli.tel?`<span style="font-size:11px;font-weight:400;color:var(--c-muted);text-transform:none">📞 ${cli.tel}</span>`:''}
+      </div>
+      <div class="fg-reg2">
+        <div class="fgr">
+          <label class="lbl">Nº Programa <span style="font-size:9px;color:var(--c-proc);font-weight:600;text-transform:none;letter-spacing:0">→ sugerido: ${prox}</span></label>
+          <input type="text" id="r-prog-${cli.id}" value="${prox}" placeholder="${prox}">
+        </div>
+        <div class="fgr"><label class="lbl">Artigo / Tecido</label><input type="text" id="r-art-${cli.id}" placeholder="Ex: Malha PV, Oxford..."></div>
+        <div class="fgr"><label class="lbl">Cor</label><input type="text" id="r-cor-${cli.id}" placeholder="Ex: Azul Marinho"></div>
+        <div class="fgr"><label class="lbl">Nº de Peças</label><input type="number" id="r-qtd-${cli.id}" placeholder="0" min="1"></div>
+        <div class="fgr"><label class="lbl">Observação</label><input type="text" id="r-obs-${cli.id}" placeholder="Ex: 7 peças já entregues desta partida"></div>
+        <button class="btn btn-r" onclick="addRegistro()">+ Registrar</button>
+      </div>
+    </div>
+    <div style="padding:11px 16px;border-bottom:1px solid var(--c-border);display:flex;gap:6px;flex-wrap:wrap;align-items:center;background:var(--c-bg)">
+      <button id="fcli-todos" class="fb fb-cli${filtroRegCli==='todos'?' on':''}" onclick="setFCli('todos','fcli-todos')">Todos <span style="font-size:10px;opacity:.7">${ctTodos}</span></button>
+      <button id="fcli-pend" class="fb fp fb-cli${filtroRegCli==='pendente'?' on':''}" onclick="setFCli('pendente','fcli-pend')">Pendente <span style="font-size:10px;opacity:.7">${ctPend}</span></button>
+      <button id="fcli-proc" class="fb fc fb-cli${filtroRegCli==='emprocesso'?' on':''}" onclick="setFCli('emprocesso','fcli-proc')">Em Processo <span style="font-size:10px;opacity:.7">${ctProc}</span></button>
+      <button id="fcli-ram" class="fb fr fb-cli${filtroRegCli==='ramado'?' on':''}" onclick="setFCli('ramado','fcli-ram')">Ramado <span style="font-size:10px;opacity:.7">${ctRam}</span></button>
+      <button id="fcli-entg" class="fb fe fb-cli${filtroRegCli==='entregue'?' on':''}" onclick="setFCli('entregue','fcli-entg')">Entregue <span style="font-size:10px;opacity:.7">${ctEntg}</span></button>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>#</th><th>Nº Prog.</th><th>Artigo</th><th>Cor</th><th>Nº Peças</th><th>Data</th><th>Status</th><th>Observação</th><th></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderHTS(){
+  const q=(document.getElementById('s-hts')?.value||'').toLowerCase();
+
+  // ★ SÓ aparecem pedidos com status "Em Processo"
+  const aguard=pedidos.filter(p=>p.etapa==='registro'&&p.status==='emprocesso');
+  const ab=document.getElementById('aguard-box');
+  if(aguard.length){
+    const btns=aguard.map(p=>{
+      const bts=HTS.map((h,i)=>`<button class="hbtn ${HTS_BCLS[i]}" onclick="alocarHTS(${p.id},'${h}')">${h}</button>`).join('');
+      return`<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:1px solid var(--c-border)">
+        <span class="tp" style="min-width:50px">${p.prog||'—'}</span>
+        <span style="font-size:12px;font-weight:600;min-width:130px">${p.clienteNome}</span>
+        <span style="font-size:12px;color:var(--c-muted)">${p.artigo} · ${p.cor} · ${p.qtd} pçs</span>
+        <div style="margin-left:auto;display:flex;gap:5px">${bts}</div>
+      </div>`;
+    }).join('');
+    ab.innerHTML=`<div class="aguard-faixa" style="flex-direction:column;align-items:stretch">
+      <div style="font-weight:700;margin-bottom:4px">⏳ ${aguard.length} pedido(s) <em>"Em Processo"</em> aguardando alocação na HTS</div>
+      ${btns}</div>`;
+  } else {
+    const outros=pedidos.filter(p=>p.etapa==='registro'&&p.status!=='entregue');
+    if(outros.length){
+      ab.innerHTML=`<div style="background:#fafaf9;border:1px solid var(--c-border);border-radius:var(--r);padding:11px 16px;margin-bottom:14px;font-size:12px;color:var(--c-muted)">
+        ℹ️ <strong>${outros.length} pedido(s)</strong> no registro ainda não estão <strong>"Em Processo"</strong>. Mude o status no Registro para liberar a alocação na HTS.</div>`;
+    } else { ab.innerHTML=''; }
+  }
+
+  // ★ Kanban com drag & drop
+  const naHTS=pedidos.filter(p=>p.etapa==='hts');
+  document.getElementById('hts-grid').innerHTML=HTS.map((hts,hi)=>{
+    const ordem=getOrdemHTS(hts);
+    const itens=ordem.map(id=>pedidos.find(p=>p.id===id&&p.hts===hts)).filter(Boolean);
+    const cards=itens.length?itens.map((p,pos)=>{
+      const hex=corHex(p.cor||'');
+      const outros=HTS.filter(h=>h!==hts).map(h=>{const idx=HTS.indexOf(h);return`<button class="hbtn ${HTS_BCLS[idx]}" onclick="moverHTS(${p.id},'${h}')">→ ${h}</button>`;}).join('');
+      const fBadge=p.htsStatus==='processo'?`<span class="hts-fila-badge hfb-proc">⚙ Processo</span>`:`<span class="hts-fila-badge hfb-fila">🔵 Fila</span>`;
+      const fBtnTxt=p.htsStatus==='processo'?'Colocar em Fila':'Colocar em Processo';
+      const fBtnAcao=p.htsStatus==='processo'?'fila':'processo';
+      return`<div class="hc ani" id="hc-${p.id}" draggable="true"
+        ondragstart="onDragStart(event,${p.id},'${hts}')"
+        ondragend="onDragEnd(event,${p.id})"
+        ondragover="onDragOver(event,${p.id},'${hts}')"
+        ondrop="onDrop(event,${p.id},'${hts}')">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+          <div style="display:flex;align-items:center;gap:5px">
+            <span class="drag-handle" title="Arraste para reordenar">⠿</span>
+            <span style="font-size:10px;font-weight:700;color:var(--c-muted);font-family:var(--fd)">#${pos+1}</span>
+            <span class="hc-prog">${p.prog||'—'}</span>
+          </div>
+          ${fBadge}
+        </div>
+        <div class="hc-cli">${p.clienteNome}</div>
+        <div class="hc-info">
+          <span>${p.artigo}</span>
+          <span><span class="cd" style="background:${hex};display:inline-block;vertical-align:middle;margin-right:3px"></span>${p.cor}</span>
+          <span>${p.qtd} pçs</span>
+        </div>
+        <div class="obs-note" onclick="editarObs(${p.id})" title="Clique para editar a observação">${p.obs?`📝 ${escapeHtml(p.obs)}`:`<span class="tobs-add">+ observação</span>`}</div>
+        <div class="hc-acts">
+          ${outros}
+          <button class="hbtn bconc" onclick="enviarConclusao(${p.id})">✓ Concluir</button>
+          <button class="hbtn brem" onclick="delPedido(${p.id})">✕</button>
+        </div>
+        <div style="margin-top:5px">
+          <button class="hbtn" style="background:#f8fafc;color:#475569;border:1px solid #cbd5e1" onclick="setHtsStatus(${p.id},'${fBtnAcao}')">${fBtnTxt}</button>
+        </div>
+      </div>`;
+    }).join(''):`<div class="hts-empty">Vazia</div>`;
+    return`<div class="hts-col"><div class="hts-h ${HTS_CLS[hi]}"><span class="hts-t">${hts}</span><span class="hts-ct">${itens.length} ${itens.length===1?'pedido':'pedidos'}</span></div><div class="hts-body">${cards}</div></div>`;
+  }).join('');
+
+  // Tabela completa
+  const todosHTS=HTS.flatMap(hts=>getOrdemHTS(hts).map((id,pos)=>({p:pedidos.find(x=>x.id===id&&x.hts===hts),pos,hts})).filter(x=>x.p));
+  const listaHTS=todosHTS.filter(({p})=>!q||(p.clienteNome||'').toLowerCase().includes(q)||(p.artigo||'').toLowerCase().includes(q)||(p.prog||'').toLowerCase().includes(q));
+  document.getElementById('tb-hts-lista').innerHTML=listaHTS.length?listaHTS.map(({p,pos})=>{
+    const hex=corHex(p.cor||'');
+    const outros=HTS.filter(h=>h!==p.hts).map(h=>{const idx=HTS.indexOf(h);return`<button class="hbtn ${HTS_BCLS[idx]}" onclick="moverHTS(${p.id},'${h}')">${h}</button>`;}).join('');
+    const sit=p.htsStatus==='processo'?`<span class="hts-fila-badge hfb-proc">⚙ Processo</span>`:`<span class="hts-fila-badge hfb-fila">🔵 Fila</span>`;
+    return`<tr>
+      <td style="font-family:var(--fd);font-weight:700;font-size:15px;color:var(--c-muted)">#${pos+1}</td>
+      <td class="tp">${p.prog||'—'}</td><td class="tcl">${p.clienteNome}</td><td>${p.artigo}</td>
+      <td><div class="cc"><div class="cd" style="background:${hex}"></div>${p.cor}</div></td>
+      <td class="tq">${p.qtd}<span>pçs</span></td>
+      <td style="font-weight:700;color:${HTS_COLORS[HTS.indexOf(p.hts)]||'var(--c-muted)'}">${p.hts||'—'}</td>
+      <td>${sit}</td>
+      <td><div style="display:flex;gap:5px;flex-wrap:wrap">${outros}<button class="hbtn bconc" onclick="enviarConclusao(${p.id})">✓ Concluir</button></div></td>
+      <td><button class="btn-x" onclick="delPedido(${p.id})">✕</button></td>
+    </tr>`;
+  }).join(''):`<tr><td colspan="10"><div class="empty"><div class="empty-i">✅</div><div class="empty-t">Nenhum pedido nas HTS</div></div></td></tr>`;
+}
+
+function renderConc(){
+  const aguardC=pedidos.filter(p=>p.etapa==='aguard_conc');
+  const cb=document.getElementById('classif-box');
+  if(aguardC.length){
+    const rows=aguardC.map(p=>{
+      const hex=corHex(p.cor||'');
+      return`<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:1px solid var(--c-border)">
+        <span class="tp" style="min-width:50px">${p.prog||'—'}</span>
+        <span style="font-size:12px;font-weight:600;min-width:130px">${p.clienteNome}</span>
+        <span style="font-size:12px;color:var(--c-muted)">${p.artigo} · <span class="cd" style="background:${hex};display:inline-block;vertical-align:middle"></span> ${p.cor} · ${p.qtd} pçs</span>
+        <div style="margin-left:auto;display:flex;gap:5px">
+          <button class="cbtn cbtn-c" onclick="abrirModal(${p.id},'concluido')">✓ Concluído</button>
+          <button class="cbtn cbtn-e" onclick="abrirModal(${p.id},'entregue')">📦 Entregue</button>
+          <button class="cbtn cbtn-x" onclick="abrirModal(${p.id},'cancelado')">✕ Cancelar</button>
+          <button class="cbtn cbtn-v" onclick="voltarRegistro(${p.id})">↩ Voltar</button>
+        </div>
+      </div>`;
+    }).join('');
+    cb.innerHTML=`<div class="aguard-faixa" style="flex-direction:column;align-items:stretch;border-color:var(--c-conc-bd);background:var(--c-conc-bg)">
+      <div style="font-weight:700;color:var(--c-conc);margin-bottom:4px">📬 ${aguardC.length} pedido(s) aguardando classificação final</div>${rows}</div>`;
+  } else { cb.innerHTML=''; }
+
+  const COLS=[{id:'concluido',cls:'cc',titulo:'✓ Concluído'},{id:'entregue',cls:'ce',titulo:'📦 Entregue'}];
+  document.getElementById('conc-grid').innerHTML=COLS.map(col=>{
+    const itens=pedidos.filter(p=>p.etapa===col.id);
+    const outro=col.id==='concluido'?'entregue':'concluido';
+    const outroCls=col.id==='concluido'?'cbtn-e':'cbtn-c';
+    const outroLbl=col.id==='concluido'?'📦 Entregue':'✓ Concluído';
+    const cards=itens.length?itens.map(p=>{
+      const hex=corHex(p.cor||'');
+      const pesoChip=p.pesoKg?`<span class="peso-chip">⚖ ${p.pesoKg} kg</span>`:'';
+      return`<div class="cc-card ani">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="cc-prog">${p.prog||'—'}</div>
+            <div class="cc-cli">${p.clienteNome}</div>
+            <div class="cc-info">${p.artigo} · <span style="display:inline-flex;align-items:center;gap:3px"><span class="cd" style="background:${hex}"></span>${p.cor}</span> · ${p.qtd} pçs</div>
+            ${pesoChip?`<div style="margin-top:5px">${pesoChip}</div>`:''}
+            ${p.hts?`<div style="font-size:11px;color:var(--c-muted);margin-top:3px">HTS: ${p.hts}</div>`:''}
+            <div class="obs-note" style="margin-top:5px;margin-bottom:0" onclick="editarObs(${p.id})" title="Clique para editar a observação">${p.obs?`📝 ${escapeHtml(p.obs)}`:`<span class="tobs-add">+ observação</span>`}</div>
+          </div>
+          <button class="btn-x" onclick="delPedido(${p.id})" style="padding:3px 7px;font-size:11px">✕</button>
+        </div>
+        <div class="cc-acts">
+          <button class="cbtn ${outroCls}" onclick="abrirModal(${p.id},'${outro}')">${outroLbl}</button>
+          <button class="cbtn cbtn-x" onclick="abrirModal(${p.id},'cancelado')">✕ Cancelar</button>
+          <button class="cbtn cbtn-v" onclick="voltarRegistro(${p.id})">↩ Voltar</button>
+        </div>
+      </div>`;
+    }).join(''):`<div class="conc-empty">—</div>`;
+    return`<div class="conc-col"><div class="conc-h ${col.cls}"><span class="conc-ht">${col.titulo}</span><span class="conc-ct">${itens.length}</span></div><div class="conc-body">${cards}</div></div>`;
+  }).join('');
+
+  const finais=pedidos.filter(p=>['concluido','entregue','cancelado'].includes(p.etapa));
+  const SF={concluido:{txt:'Concluído',cor:'var(--c-conc)'},entregue:{txt:'Entregue',cor:'var(--c-entg)'},cancelado:{txt:'Cancelado',cor:'var(--c-cancel)'}};
+  document.getElementById('tb-resumo').innerHTML=finais.length?finais.map(p=>{
+    const hex=corHex(p.cor||'');const sf=SF[p.etapa]||{txt:p.etapa,cor:'var(--c-muted)'};
+    return`<tr><td class="tp">${p.prog||'—'}</td><td class="tcl">${p.clienteNome}</td><td>${p.artigo}</td><td><div class="cc"><div class="cd" style="background:${hex}"></div>${p.cor}</div></td><td class="tq">${p.qtd}<span>pçs</span></td><td class="tpe">${p.pesoKg?p.pesoKg+' kg':'—'}</td><td style="font-size:12px;font-weight:700;color:${HTS_COLORS[HTS.indexOf(p.hts)]||'var(--c-muted)'}">${p.hts||'—'}</td><td><span style="font-size:11px;font-weight:700;color:${sf.cor}">${sf.txt}</span></td></tr>`;
+  }).join(''):`<tr><td colspan="8"><div class="empty"><div class="empty-i">📊</div><div class="empty-t">Nenhum pedido finalizado ainda</div></div></td></tr>`;
+}
+
+function renderClientes(){
+  document.getElementById('tb-cli').innerHTML=clientes.length?clientes.map((c,i)=>{
+    const n=pedidos.filter(p=>p.clienteNome===c.nome).length;
+    return`<tr><td class="tn">${i+1}</td><td><strong>${c.nome}</strong>${c.obs?`<div style="font-size:11px;color:var(--c-muted)">${c.obs}</div>`:''}</td><td style="font-size:12px">${c.tel||'—'}</td><td style="font-family:var(--fd);font-size:16px;font-weight:700;color:var(--c-proc)">${n}</td><td class="tdt">${fmtD(c.criado)}</td><td>${currentProfile?.role==='admin'?`<button class="btn-x" onclick="delCliente(${c.id})">✕</button>`:''}</td></tr>`;
+  }).join(''):`<tr><td colspan="6"><div class="empty"><div class="empty-i">👥</div><div class="empty-t">Nenhum cliente cadastrado</div></div></td></tr>`;
+}
+
+// ★ ÁREA DO CLIENTE
+function renderAreaCliente(){
+  const itens=document.getElementById('cli-lista-itens');
+  if(currentProfile?.role==='client'){clienteSelecionado=currentProfile.client_id||null;if(clienteSelecionado!==null)mostrarDetalheCliente(clienteSelecionado);else document.getElementById('cli-detalhe').innerHTML='<div class="cli-empty-sel"><div style="font-size:32px">🔒</div><div>Seu acesso ainda não está vinculado a um cliente. Fale com a CS Têxtil.</div></div>';return;}
+  if(!clientes.length){
+    itens.innerHTML=`<div class="empty" style="padding:20px"><div class="empty-i">👥</div><div class="empty-t">Nenhum cliente</div></div>`;
+  } else {
+    itens.innerHTML=clientes.map(c=>{
+      const n=pedidos.filter(p=>p.clienteNome===c.nome).length;
+      const ativo=clienteSelecionado===c.id?'ativo':'';
+      return`<div class="cli-item ${ativo}" onclick="selecionarCliente(${c.id})">
+        <span class="cli-item-nome">${c.nome}</span>
+        <span class="cli-item-ct">${n}</span>
+      </div>`;
+    }).join('');
+  }
+  if(clienteSelecionado!==null)mostrarDetalheCliente(clienteSelecionado);
+}
+
+function selecionarCliente(id){
+  clienteSelecionado=id;
+  renderAreaCliente();
+}
+
+function mostrarDetalheCliente(id){
+  const c=clientes.find(x=>x.id===id);
+  if(!c){document.getElementById('cli-detalhe').innerHTML='';return;}
+  const peds=pedidos.filter(p=>p.clienteNome===c.nome);
+  const tot=peds.length;
+  const naHts=peds.filter(p=>p.etapa==='hts').length;
+  const concluidos=peds.filter(p=>['concluido','entregue'].includes(p.etapa)).length;
+  const pendentes=peds.filter(p=>p.etapa==='registro').length;
+  const pesoTotal=peds.reduce((acc,p)=>acc+(parseFloat(p.pesoKg)||0),0);
+  const ETAPA_INFO={concluido:{txt:'Concluído',cor:'var(--c-conc)'},entregue:{txt:'Entregue',cor:'var(--c-entg)'},cancelado:{txt:'Cancelado',cor:'var(--c-cancel)'},hts:{txt:'Na HTS',cor:'var(--c-proc)'},aguard_conc:{txt:'Aguard. Conclusão',cor:'var(--c-conc)'},registro:{txt:'No Registro',cor:'var(--c-muted)'}};
+  const rows=peds.length?peds.map(p=>{
+    const hex=corHex(p.cor||'');
+    const ei=ETAPA_INFO[p.etapa]||{txt:p.etapa,cor:'var(--c-muted)'};
+    return`<tr>
+      <td class="tp">${p.prog||'—'}</td><td>${p.artigo||'—'}</td>
+      <td><div class="cc"><div class="cd" style="background:${hex}"></div>${p.cor||'—'}</div></td>
+      <td class="tq">${p.qtd||0}<span>pçs</span></td>
+      <td>${p.hts?`<span style="font-weight:700;color:${HTS_COLORS[HTS.indexOf(p.hts)]||'var(--c-muted)'}">${p.hts}</span>`:'—'}</td>
+      <td>${p.pesoKg?p.pesoKg+' kg':'—'}</td>
+      <td class="tdt">${fmtD(p.criado)}</td>
+      <td><span style="font-size:11px;font-weight:700;color:${ei.cor}">${ei.txt}</span></td>
+      <td class="tobs" ${currentProfile?.role!=='client'?`onclick="editarObs(${p.id})" title="Clique para editar a observação"`:''}>${p.obs?`<span class="tobs-txt">📝 ${escapeHtml(p.obs)}</span>`:(currentProfile?.role!=='client'?`<span class="tobs-add">+ observação</span>`:'—')}</td>
+    </tr>`;
+  }).join(''):`<tr><td colspan="9"><div class="empty"><div class="empty-i">📄</div><div class="empty-t">Nenhum pedido para este cliente</div></div></td></tr>`;
+
+  document.getElementById('cli-detalhe').innerHTML=`
+    <div class="cli-det-h">
+      <div>
+        <div class="cli-det-nome">${c.nome}</div>
+        ${c.tel?`<div class="cli-det-tel">📞 ${c.tel}</div>`:''}
+        ${c.obs?`<div style="font-size:12px;color:var(--c-muted);font-style:italic">${c.obs}</div>`:''}
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:var(--c-muted)">Cliente desde ${fmtD(c.criado)}</div>
+      </div>
+    </div>
+    <div class="cli-stats">
+      <div class="cli-stat"><div class="cli-stat-v">${tot}</div><div class="cli-stat-l">Total Pedidos</div></div>
+      <div class="cli-stat"><div class="cli-stat-v" style="color:var(--c-pend)">${pendentes}</div><div class="cli-stat-l">No Registro</div></div>
+      <div class="cli-stat"><div class="cli-stat-v" style="color:var(--c-proc)">${naHts}</div><div class="cli-stat-l">Nas HTS</div></div>
+      <div class="cli-stat"><div class="cli-stat-v" style="color:var(--c-conc)">${concluidos}</div><div class="cli-stat-l">Concluídos</div></div>
+      ${pesoTotal>0?`<div class="cli-stat"><div class="cli-stat-v" style="color:var(--c-proc)">${pesoTotal.toFixed(1)} kg</div><div class="cli-stat-l">Peso Total</div></div>`:''}
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Nº Prog.</th><th>Artigo</th><th>Cor</th><th>Peças</th><th>HTS</th><th>Peso</th><th>Data</th><th>Status</th><th>Observação</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function toast(msg,tp='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${tp} show`;
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+function exportCSV(secao){
+  let rows=[],nome='';
+  if(secao==='registro'){
+    nome='registro-pedidos';
+    rows.push(['Nº Programa','Cliente','Artigo','Cor','Nº Peças','Data Registro','Status Produção','Etapa','Observação']);
+    pedidos.forEach(p=>rows.push([p.prog||'',p.clienteNome||'',p.artigo||'',p.cor||'',p.qtd||0,p.criado||'',
+      {pendente:'Pendente',emprocesso:'Em Processo',ramado:'Ramado',entregue:'Entregue'}[p.status]||p.status||'',
+      {registro:'No Registro',hts:'Na HTS',aguard_conc:'Aguard. Conclusão',concluido:'Concluído',entregue:'Entregue',cancelado:'Cancelado'}[p.etapa]||p.etapa||'',
+      p.obs||'']));
+  }
+  if(secao==='hts'){
+    nome='fila-hts';
+    rows.push(['Ordem','Nº Programa','Cliente','Artigo','Cor','Nº Peças','HTS','Situação na HTS']);
+    HTS.forEach(hts=>{getOrdemHTS(hts).forEach((id,pos)=>{const p=pedidos.find(x=>x.id===id&&x.hts===hts);if(p)rows.push([pos+1,p.prog||'',p.clienteNome||'',p.artigo||'',p.cor||'',p.qtd||0,p.hts||'',p.htsStatus==='processo'?'Em Processo':'Em Fila']);});});
+    if(!pedidos.filter(p=>p.etapa==='hts').length){toast('Nenhum pedido nas HTS para exportar!','warn');return;}
+  }
+  if(!rows.length){toast('Nenhum dado para exportar!','warn');return;}
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`cstextil-${nome}-${new Date().toISOString().substring(0,10)}.csv`;a.click();
+  toast('✓ CSV exportado!','ok');
+}
+
+function exportPDF(secao){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('print-on'));
+  const now=new Date().toLocaleString('pt-BR');
+  const nomes={registro:'Registro de Pedidos',hts:'Fila HTS'};
+  document.getElementById('ph-sec').textContent='— '+(nomes[secao]||secao);
+  document.getElementById('ph-meta').textContent=`Emitido em: ${now}  |  Total pedidos: ${pedidos.length}  |  Nas HTS: ${pedidos.filter(p=>p.etapa==='hts').length}  |  Concluídos: ${pedidos.filter(p=>['concluido','entregue'].includes(p.etapa)).length}`;
+  const mapa={registro:'page-registro',hts:'page-hts'};
+  const el=document.getElementById(mapa[secao]);
+  if(el){el.classList.add('print-on');window.print();el.classList.remove('print-on');}
+  toast('✓ Pronto! Salve como PDF na janela de impressão.','info');
+}
+
+function imprimir(secao){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('print-on'));
+  const now=new Date().toLocaleString('pt-BR');
+  document.getElementById('ph-meta').textContent=`Emitido em: ${now}  |  Total: ${pedidos.length} pedidos  |  Nas HTS: ${pedidos.filter(p=>p.etapa==='hts').length}  |  Concluídos: ${pedidos.filter(p=>['concluido','entregue'].includes(p.etapa)).length}`;
+  const nomes={registro:'Registro de Pedidos',hts:'Fila HTS',conclusao:'Conclusão e Resumo',todos:'Relatório Completo'};
+  document.getElementById('ph-sec').textContent='— '+(nomes[secao]||'');
+  if(secao==='todos'){document.querySelectorAll('.page').forEach(p=>p.classList.add('print-on'));}
+  else{const mapa={registro:'page-registro',hts:'page-hts',conclusao:'page-conclusao'};const el=document.getElementById(mapa[secao]);if(el)el.classList.add('print-on');}
+  window.print();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('print-on'));
+}
+
+init();
+</script>
+</body>
+</html>
